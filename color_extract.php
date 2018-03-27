@@ -49,7 +49,7 @@ function detectColors($image, $num, $level = 5, &$paletteOUT, &$palette_RawOUT) 
 function detectColors_Raw($image, $num, $level = 5) {
   $level = (int)$level;
   $palette = array();
-  $size = getimagesize($image);
+    $size = getimagesize($image);
   if(!$size) {
     return FALSE;
   }
@@ -133,8 +133,13 @@ function image2BW($im) {
 $img = 'watermelon.png';
 if (isset($_REQUEST['img'])) { $img = $_REQUEST['img'];}
 $image = @imagecreatefrompng($img);
+$img_tmp = imagecreatetruecolor(32, 32);
+imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
+$image = $img_tmp;
 $imageBW = @imagecreatefrompng($img);
-
+$img_tmp = imagecreatetruecolor(32, 32);
+imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
+$imageBW = $img_tmp;
 detectColors($img,16,2,$palette,$palette_Raw);
 echo '<img width=64 height=64 style="image-rendering: pixelated" src="' . $img . '" />';
 //get to b&w then capture it
@@ -155,7 +160,7 @@ echo '</table>';
 //Write ICONDATA.VMS
 $fp = fopen("ICONDATA.VMS","w");
 //write name
-fwrite($fp, str_pad($img,16," ",STR_PAD_RIGHT));
+fwrite($fp, str_pad(substr($img,0,16),16," ",STR_PAD_RIGHT));
 //Write Header
 fwrite($fp,pack("H*","20000000A00000000000000000000000"));
 //write b&w icon
@@ -166,7 +171,7 @@ fwrite($fp,$data2);
 }
 //Write Color Palette
 for($x=0;$x<16;$x++){
-fwrite($fp,pack("H*",($palette_Raw[$x]) ? $palette_Raw[$x] : "0000" ));
+fwrite($fp,pack("H*",(isset($palette_Raw[$x])) ? $palette_Raw[$x] : "0000" ));
 }
 
 function compareColors($colorA, $colorB) {
