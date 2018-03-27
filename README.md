@@ -1,7 +1,8 @@
-VMU Icon generator:
-//NeoDC, 2017.
-//License:
-//Respect and dont steal.
+# VMU Icon generator:
+NeoDC, 2017.
+
+License:
+Respect and dont steal.
 
 This tool will enable you to take a 32x32 image and 
 then transform it into a suitable format to use on a VMU
