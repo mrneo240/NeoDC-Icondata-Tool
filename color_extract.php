@@ -93,7 +93,7 @@ function image2BW($im) {
             $g = ($rgb >> 8 ) & 0xFF;
             $b = $rgb & 0xFF;
             $gray = ($r* 0.299 + $g* 0.587 + $b* 0.114) ;
-            $gray = ($r + $g+ $b)/3 ;
+            //$gray = ($r + $g+ $b)/3 ;
             $threshold = 0x66;
             if (isset($_REQUEST['threshold'])) { $threshold = hexdec($_REQUEST['threshold']);}
             if ($gray < $threshold) {
@@ -140,7 +140,9 @@ $imageBW = @imagecreatefrompng($img);
 $img_tmp = imagecreatetruecolor(32, 32);
 imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
 $imageBW = $img_tmp;
-detectColors($img,16,2,$palette,$palette_Raw);
+$detect_levels = 2;
+if (isset($_REQUEST['levels'])) { $detect_levels = $_REQUEST['levels'];}
+detectColors($img,16,$detect_levels,$palette,$palette_Raw);
 echo '<img width=64 height=64 style="image-rendering: pixelated" src="' . $img . '" />';
 //get to b&w then capture it
 image2BW($imageBW);
