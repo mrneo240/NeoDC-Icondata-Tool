@@ -1,4 +1,14 @@
 <?php
+//NeoDC, 2018.
+//License:
+//Respect and dont steal.
+//(not that would be hard for anyone to figure out) its just more about the ethics of it. 
+//feel free to modify though and expand and such
+//Open source your changes!!!
+//Remember: its for the community
+//Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
+
+require('vmi_format.php');
 
 function detectColors($image, $num, $level = 5, &$paletteOUT, &$palette_RawOUT) {
   $level = (int)$level;
@@ -192,6 +202,69 @@ function saveVMU() {
 	//Done Finally!
 	fclose($fp);
 	echo 'Written Successfully!';
+	writeVMI_ICON();
+}
+
+// Output JSON
+function outputJSON($msg, $status = 'error'){
+    header('Content-Type: application/json');
+    die(json_encode(array(
+        'data' => $msg,
+        'status' => $status
+    )));
+}
+
+function uploadImg() {
+
+// Check for errors
+if($_FILES['SelectedFile']['error'] > 0){
+    outputJSON('An error ocurred when uploading.');
+}
+
+if(!getimagesize($_FILES['SelectedFile']['tmp_name'])){
+    outputJSON('Please ensure you are uploading an image.');
+}
+
+// Check filetype
+/*if($_FILES['SelectedFile']['type'] != 'image/png'){
+    outputJSON('Unsupported filetype uploaded.');
+}*/
+
+// DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
+    // Check MIME Type by yourself.
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    if (false === $ext = array_search(
+        $finfo->file($_FILES['SelectedFile']['tmp_name']),
+        array(
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+        ),
+        true
+    )) {
+        throw new RuntimeException('Invalid file format.');
+    }
+
+// Check filesize
+if($_FILES['SelectedFile']['size'] > 500000){
+    outputJSON('File uploaded exceeds maximum upload size.');
+}
+
+// You should name it uniquely.
+    // DO NOT USE $_FILES['upfile']['name'] WITHOUT ANY VALIDATION !!
+    // On this example, obtain safe unique name from its binary data.
+    if (!move_uploaded_file(
+        $_FILES['SelectedFile']['tmp_name'],
+        $filename = sprintf('./upload/%s.%s',
+            sha1_file($_FILES['SelectedFile']['tmp_name']),
+            $ext
+        )
+    )) {
+        throw new RuntimeException('Failed to move uploaded file.');
+    }
+
+// Success!
+outputJSON($filename,'success');
 }
 	
 // Report all PHP errors (see changelog)
@@ -212,6 +285,9 @@ switch($command){
     break;
 	case "saveVMU":
 	saveVMU();
+	break;
+	case "uploadImg":
+	uploadImg();
     default:
     break;
 }

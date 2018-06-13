@@ -1,11 +1,12 @@
 <?php
-//NeoDC, 2017.
+//NeoDC, 2018.
 //License:
 //Respect and dont steal.
 //(not that would be hard for anyone to figure out) its just more about the ethics of it. 
 //feel free to modify though and expand and such
 //Open source your changes!!!
 //Remember: its for the community
+//Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
 
 function bigdecbin($dec,$doublewords=1) { 
     $erg = ""; 

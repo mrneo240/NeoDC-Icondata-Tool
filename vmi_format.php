@@ -1,11 +1,12 @@
 <?php
-//NeoDC, 2017.
+//NeoDC, 2018.
 //License:
 //Respect and dont steal.
 //(not that would be hard for anyone to figure out) its just more about the ethics of it. 
 //feel free to modify though and expand and such
 //Open source your changes!!!
 //Remember: its for the community
+//Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
 
 function readVMI($filename){
 /* VMI Format */
@@ -118,10 +119,10 @@ function createVMI_ICON($desc,$filename){
     $checksumInput = unpack("H2a/H2b/H2c/H2d","SEGA");
     $checksumData = unpack("H2a/H2b/H2c/H2d",$filename);
     $desc['Checksum'] = 
-    chr(hexdec($checksumInput[a]) & hexdec($checksumData[a])).
-    chr(hexdec($checksumInput[b]) & hexdec($checksumData[b])).
-    chr(hexdec($checksumInput[c]) & hexdec($checksumData[c])).
-    chr(hexdec($checksumInput[d]) & hexdec($checksumData[d]));
+    chr(hexdec($checksumInput['a']) & hexdec($checksumData['a'])).
+    chr(hexdec($checksumInput['b']) & hexdec($checksumData['b'])).
+    chr(hexdec($checksumInput['c']) & hexdec($checksumData['c'])).
+    chr(hexdec($checksumInput['d']) & hexdec($checksumData['d']));
 
     $date = getdate();
     
@@ -208,7 +209,7 @@ $vmiDescription = array('Checksum' => '0000', //dont touch
 //Generate an ICONDATA.VMI file
  createVMI_ICON($vmiDescription,"ICONDATA");
  echo 'ICONDATA.VMI Written successfully<br>';
- print_r($vmiDescription);
+ //print_r($vmiDescription);
 }
 
 ?>
