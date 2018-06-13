@@ -102,7 +102,7 @@ $deviation = PHP_INT_MAX;
 }
 
 function setupBasic() {
-	global $palette, $imageBW, $image_data, $img, $image_binary, $image;
+	global $palette, $imageBW, $image_data, $img, $image_binary, $image, $img_tmp, $image_color;
 	$img = 'watermelon.png';
 	if (isset($_REQUEST['img'])) { $img = $_REQUEST['img'];}
 	$image = @imagecreatefrompng($img);
@@ -129,34 +129,43 @@ $img = "";
 function getPalette() {
 	global $palette;
 	setupBasic();
-	echo '<table>';
+
+	echo '<table><tr>';
 	foreach($palette as $color) {
-	  echo '<tr><td style="background:#' . $color . '; width:36px;"></td><td>#' . $color . '</td></tr>';
+		echo '<td style="background:#' . $color . '; width:36px;height:48px;"><span style="font-weight:bold">#'.$color.'</span></td>';
 	}
-	echo '</table>';
+	echo '</tr></table>';
 }
 
 function getBWPreview() {
-	global $palette, $imageBW, $image_data;
+	global $palette, $imageBW, $image_data, $img_tmp;
 	
 	setupBasic();
 	//Output the stuff
-	echo '<img width=64 height=64 style="image-rendering: pixelated" '.
+	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
 	'src="data:image/png;base64,'.base64_encode($image_data).'" alt="Red dot" /><br><br>';
 }
 function getImgPreview() {
-	global $img;
+	global $img, $image_color;
 	
 	setupBasic();
-	echo '<img width=64 height=64 style="image-rendering: pixelated" src="' . $img . '" />';
+	echo '<img width=128 height=128 style="image-rendering: pixelated" src="' . $img . '" />';
+	//echo '<img width=128 height=128 style="image-rendering: pixelated" '.
+	//'src="data:image/png;base64,'.base64_encode($image_color).'" alt="Red dot" /><br><br>';
 }
 
 function saveVMU() {
+	$folder = ".";
+	if (isset($_REQUEST['folder'])) { $folder = $_REQUEST['folder'];}
 	global $img, $image_binary, $palette, $palette_Raw, $image;
 	setupBasic();
 	
 	//Write ICONDATA.VMS
-	$fp = fopen("ICONDATA.VMS","w");
+	//$folder = sha1_file($_FILES['SelectedFile']['tmp_name']);
+	if (!file_exists('.//upload//'.$folder)) {
+	mkdir('.//upload//'.$folder);
+	}
+    $fp = fopen('.//upload//'.$folder.'//'.'ICONDATA.VMS','w');
 	//write name
 	fwrite($fp, str_pad(substr($img,0,16),16," ",STR_PAD_RIGHT));
 	//Write Header
@@ -201,8 +210,8 @@ function saveVMU() {
 	}
 	//Done Finally!
 	fclose($fp);
-	echo 'Written Successfully!';
-	writeVMI_ICON();
+	//echo '<h3> Icon written Successfully!</h3>';
+	writeVMI_ICON($folder);
 }
 
 // Output JSON
@@ -224,11 +233,6 @@ if($_FILES['SelectedFile']['error'] > 0){
 if(!getimagesize($_FILES['SelectedFile']['tmp_name'])){
     outputJSON('Please ensure you are uploading an image.');
 }
-
-// Check filetype
-/*if($_FILES['SelectedFile']['type'] != 'image/png'){
-    outputJSON('Unsupported filetype uploaded.');
-}*/
 
 // DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
     // Check MIME Type by yourself.

@@ -92,7 +92,7 @@ function createVMI($desc,$filename){
     fwrite($fp,$data);
     fclose($fp);
 }
-function createVMI_ICON($desc,$filename){
+function createVMI_ICON($desc,$filename,$folder){
     $header_format =
         'A4'. //="SEGA" AND sub(VMSName,4);
         'a32'.
@@ -114,7 +114,10 @@ function createVMI_ICON($desc,$filename){
         
     $filename_orig = $filename;
     $filename = str_pad(strtoupper(substr($filename,0,8)),8,"_");
-    $fp = fopen($filename.'.VMI', 'w');
+	if (!file_exists('.//upload//'.$folder)) {
+	mkdir('.//upload//'.$folder);
+	}
+    $fp = fopen('.//upload//'.$folder.'//'.$filename.'.VMI', 'w');
     
     $checksumInput = unpack("H2a/H2b/H2c/H2d","SEGA");
     $checksumData = unpack("H2a/H2b/H2c/H2d",$filename);
@@ -143,7 +146,7 @@ function createVMI_ICON($desc,$filename){
                 $filename."_VMS",
                 0, //dont touch
                 0, //dont touch
-                filesize($filename_orig.".VMS"));
+                filesize('.//upload//'.$folder.'//'.$filename_orig.".VMS"));
                 
     fwrite($fp,$data);
     fclose($fp);
@@ -158,7 +161,7 @@ switch($command){
     writeVMI();
     break;
     case "writeVMI_ICON":
-    writeVMI_ICON();
+    writeVMI_ICON('.');
     break;
     case "readVMI":
     readVMI_File();
@@ -195,7 +198,7 @@ $vmiDescription = array('Checksum' => '0000', //dont touch
  print_r($vmiDescription);
 }
 
-function writeVMI_ICON(){
+function writeVMI_ICON($folder){
 $desc = 'TEST';
 if (isset($_REQUEST['desc'])) { $desc = $_REQUEST['desc'];}
 $cpy = 'NeoDC';
@@ -207,9 +210,34 @@ $vmiDescription = array('Checksum' => '0000', //dont touch
                         'Description' => $desc, //up to 32 characters
                         'Copyright'=> $cpy); //up to 32 characters
 //Generate an ICONDATA.VMI file
- createVMI_ICON($vmiDescription,"ICONDATA");
- echo 'ICONDATA.VMI Written successfully<br>';
+ createVMI_ICON($vmiDescription,"ICONDATA", $folder);
+echo  './/upload//'.$folder.'//<h3>ICONDATA.VMI Written successfully</h3>';
  //print_r($vmiDescription);
+ 
+ //createZipAndDownload($folder);
+}
+
+function createZipAndDownload($folder) {
+	
+	$file_names = array('ICONDATA.VMI','ICONDATA.VMS');
+    $zip = new ZipArchive();
+    //create the file and throw the error if unsuccessful
+    if ($zip->open('.//upload//'.$folder.'//tmp.zip', ZIPARCHIVE::CREATE )!==TRUE) {
+        exit("cannot open <$archive_file_name>\n");
+    }
+    //add each files of $file_name array to archive
+    foreach($file_names as $files)
+    {
+        $zip->addFile('.//upload//'.$folder.'//'.$files,$files);
+    }
+    $zip->close();
+    //then send the headers to force download the zip file
+    header("Content-type: application/zip"); 
+    header("Content-Disposition: attachment; filename=ICONDATA.ZIP"); 
+    header("Pragma: no-cache"); 
+    header("Expires: 0"); 
+    readfile('.//upload//'.$folder.'//tmp.zip');
+    exit;
 }
 
 ?>
