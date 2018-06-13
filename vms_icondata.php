@@ -12,6 +12,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 //Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
 
+require_once('util.php');
+
 function bigdecbin($dec,$doublewords=1) { 
     $erg = ""; 
     do { 

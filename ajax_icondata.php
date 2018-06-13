@@ -13,6 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 //Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
 
 require_once('vmi_format.php');
+require_once('util.php');
 
 function detectColors($image, $num, $level = 5, &$paletteOUT, &$palette_RawOUT) {
   $level = (int)$level;
@@ -253,15 +254,6 @@ function saveVMU() {
 	fclose($fp);
 	//echo '<h3> Icon written Successfully!</h3>';
 	writeVMI_ICON($folder);
-}
-
-// Output JSON
-function outputJSON($msg, $status = 'error'){
-    header('Content-Type: application/json');
-    die(json_encode(array(
-        'data' => $msg,
-        'status' => $status
-    )));
 }
 
 function uploadImg() {

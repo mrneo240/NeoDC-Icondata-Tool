@@ -116,6 +116,23 @@ function saveVMU() {
 	window.open("ajax_icondata.php?"+encodeURI(parameters));
 }
 
+function combineVMU() {
+    function completedAJAX(response) {
+        save.innerHTML = response;
+    }
+    var parameters = {
+        "cmd": "getCombined",
+        "bw": document.getElementById("bw").value,
+        "color": document.getElementById("color").value
+    };
+
+	//display and save.
+    //AjaxPost("ajax_icondata.php", parameters, completedAJAX);
+	
+	//download as zip
+	window.open("ajax_combine.php?"+encodeURI(parameters));
+}
+
 
 function setupBasics() {
 

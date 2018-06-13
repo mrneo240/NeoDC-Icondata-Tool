@@ -35,7 +35,7 @@ var upload = function() {
                     data: 'Unknown error occurred: [' + request.responseText + ']'
                 };
             }
-            //document.getElementById("status").innerHTML = '<h3>' + resp.status + ': ' + resp.data + '</h3>';
+            document.getElementById("status").innerHTML = '<h3>' + resp.status + ': ' + resp.data + '</h3>';
             if (resp.status == 'success') {
                 window.uploadedName = resp.data;
 				window.rawName = resp.data.split('\\').pop().split('/').pop().split('.')[0];

@@ -12,6 +12,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 //Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
 
+require_once('util.php');
+
 function readVMI($filename){
 /* VMI Format */
 $header_format =
@@ -220,28 +222,4 @@ $vmiDescription = array('Checksum' => '0000', //dont touch
  
  createZipAndDownload($folder);
 }
-
-function createZipAndDownload($folder) {
-	
-	$file_names = array('ICONDATA.VMI','ICONDATA.VMS');
-    $zip = new ZipArchive();
-    //create the file and throw the error if unsuccessful
-    if ($zip->open('.//upload//'.$folder.'//tmp.zip', ZIPARCHIVE::CREATE )!==TRUE) {
-        exit("cannot open <$archive_file_name>\n");
-    }
-    //add each files of $file_name array to archive
-    foreach($file_names as $files)
-    {
-        $zip->addFile('.//upload//'.$folder.'//'.$files,$files);
-    }
-    $zip->close();
-    //then send the headers to force download the zip file
-    header("Content-type: application/zip"); 
-    header("Content-Disposition: attachment; filename=ICONDATA.ZIP"); 
-    header("Pragma: no-cache"); 
-    header("Expires: 0"); 
-    readfile('.//upload//'.$folder.'//tmp.zip');
-    exit;
-}
-
 ?>
