@@ -8,7 +8,7 @@
 //Remember: its for the community
 //Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
 
-require('vmi_format.php');
+require_once('vmi_format.php');
 
 function detectColors($image, $num, $level = 5, &$paletteOUT, &$palette_RawOUT) {
   $level = (int)$level;
@@ -50,12 +50,45 @@ function detectColors($image, $num, $level = 5, &$paletteOUT, &$palette_RawOUT) 
   $palette_RawOUT = array_slice(array_keys($palette_Raw), 0, $num);
 }
 
+function detectColors_Raw($image, $num, $level = 5) {
+  $level = (int)$level;
+  $palette = array();
+    $size = getimagesize($image);
+  if(!$size) {
+    return FALSE;
+  }
+  switch($size['mime']) {
+    case 'image/jpeg':
+      $img = imagecreatefromjpeg($image);
+      break;
+    case 'image/png':
+      $img = imagecreatefrompng($image);
+      break;
+    case 'image/gif':
+      $img = imagecreatefromgif($image);
+      break;
+    default:
+      return FALSE;
+  }
+  if(!$img) {
+    return FALSE;
+  }
+  for($i = 0; $i < $size[0]; $i += $level) {
+    for($j = 0; $j < $size[1]; $j += $level) {
+      $thisColor = imagecolorat($img, $i, $j);
+      $rgb = imagecolorsforindex($img, $thisColor);
+      $color = sprintf('%X%XF%X', (round(round(($rgb['green'] / 0x11)))), round(round(($rgb['blue'] / 0x11))), round(round(($rgb['red'] / 0x11))));
+      $palette[$color] = isset($palette[$color]) ? ++$palette[$color] : 1;
+    }
+  }
+  arsort($palette);
+  return array_slice(array_keys($palette), 0, $num);
+}
 $image_binary = array();
 $image_string = "";
 function image2BW($im) {
-    global $image_binary, $image_string;
-	$threshold = 0x66;
-	if (isset($_REQUEST['threshold'])) { $threshold = ($_REQUEST['threshold']-1)*0x11;}
+    global $image_binary;
+    global $image_string;
     for ($y = imagesy($im); $y--;) {
         $data_string = "";
         for ($x =0;$x< imagesx($im); $x++) {
@@ -65,7 +98,8 @@ function image2BW($im) {
             $b = $rgb & 0xFF;
             $gray = ($r* 0.299 + $g* 0.587 + $b* 0.114) ;
             //$gray = ($r + $g+ $b)/3 ;
-            
+			$threshold = 0x66;
+			if (isset($_REQUEST['threshold'])) { $threshold = ($_REQUEST['threshold']-1)*0x11;}
             if ($gray < $threshold) {
                 imagesetpixel($im, $x, $y, 0xFFFFFF);
                 $data_string .= "1";
@@ -88,28 +122,32 @@ function compareColors($colorA, $colorB) {
             abs(hexdec(substr($colorA,2,2))-hexdec(substr($colorB,2,2))) +
             abs(hexdec(substr($colorA,4,2))-hexdec(substr($colorB,4,2)));
 }
-
 function findColorMatch($colorInput, $palette){
-$deviation = PHP_INT_MAX;
-   foreach ($palette as $color) {
-        $curDev = compareColors($colorInput, $color);
-        if ($curDev < $deviation) {
-            $deviation = $curDev;
-            $selectedColor = $color;
-        }
-    }
+	global $selectedColor;
+	$deviation = PHP_INT_MAX;
+	foreach ($palette as $color) {
+		$curDev = compareColors($colorInput, $color);
+		if ($curDev < $deviation) {
+			$deviation = $curDev;
+			$selectedColor = $color;
+		}
+	}
     return array_search($selectedColor,$palette);
 }
 
 function setupBasic() {
-	global $palette, $imageBW, $image_data, $img, $image_binary, $image, $img_tmp, $image_color;
+	global $imageBW, $image_data, $img, $image_binary, $image, $img_tmp, $image_color, $palette,$palette_Raw;
 	$img = 'watermelon.png';
 	if (isset($_REQUEST['img'])) { $img = $_REQUEST['img'];}
-	$image = @imagecreatefrompng($img);
+	$image = @imagecreatefromstring(file_get_contents($img));
 	$img_tmp = imagecreatetruecolor(32, 32);
 	imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
 	$image = $img_tmp;
-	$imageBW = @imagecreatefrompng($img);
+	ob_start();
+	imagepng($image);
+	$image_color = ob_get_contents();
+	ob_end_clean();
+	$imageBW = @imagecreatefromstring(file_get_contents($img));
 	$img_tmp = imagecreatetruecolor(32, 32);
 	imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
 	$imageBW = $img_tmp;
@@ -150,8 +188,8 @@ function getImgPreview() {
 	
 	setupBasic();
 	echo '<img width=128 height=128 style="image-rendering: pixelated" src="' . $img . '" />';
-	//echo '<img width=128 height=128 style="image-rendering: pixelated" '.
-	//'src="data:image/png;base64,'.base64_encode($image_color).'" alt="Red dot" /><br><br>';
+	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
+	'src="data:image/png;base64,'.base64_encode($image_color).'" alt="Red dot" /><br><br>';
 }
 
 function saveVMU() {
@@ -202,11 +240,10 @@ function saveVMU() {
        $temp .= (string)dechex($match);
         fwrite($fp,pack("H*",$temp));
     }
-	}
-
+}
 	//pad out i guess
 	for ($y=0;$y<320;$y++) {
-		fwrite($fp,pack("H*","1A"));
+	fwrite($fp,pack("H*","1A"));
 	}
 	//Done Finally!
 	fclose($fp);

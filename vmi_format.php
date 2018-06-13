@@ -211,10 +211,10 @@ $vmiDescription = array('Checksum' => '0000', //dont touch
                         'Copyright'=> $cpy); //up to 32 characters
 //Generate an ICONDATA.VMI file
  createVMI_ICON($vmiDescription,"ICONDATA", $folder);
-echo  './/upload//'.$folder.'//<h3>ICONDATA.VMI Written successfully</h3>';
+//echo  './/upload//'.$folder.'//<h3>ICONDATA.VMI Written successfully</h3>';
  //print_r($vmiDescription);
  
- //createZipAndDownload($folder);
+ createZipAndDownload($folder);
 }
 
 function createZipAndDownload($folder) {

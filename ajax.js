@@ -96,8 +96,11 @@ function saveVMU() {
 		"folder": window.rawName
     };
 
-    AjaxPost("ajax_icondata.php", parameters, completedAJAX);
-	//window.open("ajax_icondata.php?"+encodeURI(parameters));
+	//display and save.
+    //AjaxPost("ajax_icondata.php", parameters, completedAJAX);
+	
+	//download as zip
+	window.open("ajax_icondata.php?"+encodeURI(parameters));
 }
 
 
