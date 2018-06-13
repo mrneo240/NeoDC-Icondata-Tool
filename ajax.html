@@ -1,0 +1,139 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="page.css">
+</head>
+
+</head>
+<body>
+
+<div class="slidecontainer">
+  <input type="range" min="1" max="15" value="8" class="slidewr" id="myRange">
+</div>
+
+
+<!-- <p><b>Start typing a name in the input field below:</b></p>
+<form> 
+First name: <input type="text" onkeyup="showHint(this.value)">
+</form>
+<p>Suggestions: <span id="txtHint"></span></p>
+-->
+
+
+<div id="ImgPreview">
+</div>
+<div id="bwPreview">
+</div>
+<div id="palette">
+</div>
+
+<form id="form" name="form">
+<input id="submit" onclick="saveVMU()" type="button" value="Submit">
+</form>
+<script>
+var slider = document.getElementById("myRange");
+var palette = document.getElementById("palette");
+
+var bwPreview = document.getElementById("bwPreview");
+var ImgPreview = document.getElementById("ImgPreview");
+
+slider.oninput = function() {
+  getSliderVal(this.value);
+  
+}
+
+function getSliderVal(val) {
+    /*if (str.length == 0) { 
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {*/
+        var palette_HTTP = new XMLHttpRequest();
+        palette_HTTP.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                palette.innerHTML = this.responseText;
+            }
+        };
+        palette_HTTP.open("GET", "ajax_icondata.php?cmd=getPalette&threshold=" + val, true);
+        palette_HTTP.send();
+		
+		
+		var bwPreview_HTTP = new XMLHttpRequest();
+        bwPreview_HTTP.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                bwPreview.innerHTML = this.responseText;
+            }
+        };
+        bwPreview_HTTP.open("GET", "ajax_icondata.php?cmd=getBWPreview&threshold=" + val, true);
+        bwPreview_HTTP.send();
+		
+		var ImgPreview_HTTP = new XMLHttpRequest();
+        ImgPreview_HTTP.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                ImgPreview.innerHTML = this.responseText;
+            }
+        };
+        ImgPreview_HTTP.open("GET", "ajax_icondata.php?cmd=getImgPreview", true);
+        ImgPreview_HTTP.send();
+    //}
+}
+
+
+
+        function createAjaxRequestObject() {
+            var xmlhttp;
+
+            if(window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else { // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            // Create the object
+            return xmlhttp;
+        }
+
+        function AjaxPost(ajaxURL, parameters, onComplete) {
+            var http3 = createAjaxRequestObject();
+
+            http3.onreadystatechange = function() {
+                if(http3.readyState == 4) {
+                    if(http3.status == 200) {
+                        if(onComplete) {
+                            onComplete(http3.responseText);
+                        }
+                    }
+                }
+            };
+
+            // Create parameter string
+            var parameterString = "";
+            var isFirst = true;
+            for(var index in parameters) {
+                if(!isFirst) {
+                    parameterString += "&";
+                } 
+                parameterString += encodeURIComponent(index) + "=" + encodeURIComponent(parameters[index]);
+                isFirst = false;
+            }
+
+            // Make request
+            http3.open("POST", ajaxURL, true);
+            http3.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            http3.send(parameterString);
+        }
+
+        function completedAJAX(response) {
+            console.log(response);
+        }
+
+        function saveVMU() {
+            var parameters = {
+              "cmd" : "saveVMU",
+              "threshold" : slider.value
+            };
+
+            AjaxPost("ajax_icondata.php", parameters, completedAJAX);
+        }
+</script>
+
+</body>
+</html>
