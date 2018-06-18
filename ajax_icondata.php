@@ -267,7 +267,7 @@ if(!getimagesize($_FILES['SelectedFile']['tmp_name'])){
     outputJSON('Please ensure you are uploading an image.');
 }
 
-// DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
+/*// DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
     // Check MIME Type by yourself.
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     if (false === $ext = array_search(
@@ -281,6 +281,8 @@ if(!getimagesize($_FILES['SelectedFile']['tmp_name'])){
     )) {
         throw new RuntimeException('Invalid file format.');
     }
+*/
+$ext = "png";
 
 // Check filesize
 if($_FILES['SelectedFile']['size'] > 500000){

@@ -44,4 +44,16 @@ function createZipAndDownload($folder) {
     exit;
 }
 
+function bigdecbin($dec,$doublewords=1) { 
+    $erg = ""; 
+    do { 
+          $rest = $dec%2147483648; 
+          if ($rest<0) $rest+=2147483648; 
+          $erg = str_pad(decbin($rest),31,"0",STR_PAD_LEFT).$erg; 
+          $dec = ($dec-$rest)/2147483648; 
+      } while (($dec>0)&&(!($dec<1))); 
+      
+      return str_pad($erg,$doublewords*31,"0",STR_PAD_LEFT); 
+}
+
 ?>
