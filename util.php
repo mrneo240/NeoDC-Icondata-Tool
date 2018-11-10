@@ -23,10 +23,24 @@ function outputJSON($msg, $status = 'error'){
 
 function createZipAndDownload($folder) {
 	
-	$file_names = array('ICONDATA.VMI','ICONDATA.VMS');
+    $file_names = array('ICONDATA.VMI','ICONDATA.VMS');
     $zip = new ZipArchive();
     //create the file and throw the error if unsuccessful
     if ($zip->open('.//upload//'.$folder.'//tmp.zip', ZIPARCHIVE::CREATE )!==TRUE) {
+        exit("cannot open <$archive_file_name>\n");
+    }
+    //add each files of $file_name array to archive
+    foreach($file_names as $files)
+    {
+        $zip->addFile('.//upload//'.$folder.'//'.$files,$files);
+    }
+    $zip->close();
+    
+    //also zip up vmu image stuff
+    $file_names = array('PALLETTE.BIN','IMAGE.BIN');
+    $zip = new ZipArchive();
+    //create the file and throw the error if unsuccessful
+    if ($zip->open('.//upload//'.$folder.'//vmu.zip', ZIPARCHIVE::CREATE )!==TRUE) {
         exit("cannot open <$archive_file_name>\n");
     }
     //add each files of $file_name array to archive

@@ -14,37 +14,30 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 require_once('util.php');
 
-function bigdecbin($dec,$doublewords=1) { 
-    $erg = ""; 
-    do { 
-          $rest = $dec%2147483648; 
-          if ($rest<0) $rest+=2147483648; 
-          $erg = str_pad(decbin($rest),31,"0",STR_PAD_LEFT).$erg; 
-          $dec = ($dec-$rest)/2147483648; 
-      } while (($dec>0)&&(!($dec<1))); 
-      
-      return str_pad($erg,$doublewords*31,"0",STR_PAD_LEFT); 
-}
+$hash = ".";
+if (isset($_REQUEST['hash'])) { $hash = $_REQUEST['hash'];}
 
 $vms_image_Color = imagecreate(32, 32);
 $vms_image = imagecreate(32, 32);
 $background = imagecolorallocate($vms_image_Color, 0, 0, 0);
 $white = imagecolorallocate($vms_image, 255, 255, 255);
 $black = imagecolorallocate($vms_image, 0, 0, 0);
-$fp = fopen('ICONDATA.VMS', 'rb');
+$fp = fopen('./upload/'.$hash.'/ICONDATA.VMS', 'rb');
 $vms_name = fread($fp,16);
 $offsetImage = unpack("l",fread($fp,4));
 $offsetImageColor = unpack("L",fread($fp,4));
 fseek($fp,$offsetImage[1]);
 for($y=0;$y<32;$y++){
-$inputData = fread($fp, 4);
-$value = unpack('N', $inputData);
-$lineData = bigdecbin($value[1]);
-for($x=-1;$x<32;$x++){
-    if(substr($lineData,$x,1)=="1"){
-    imagesetpixel($vms_image,$x+1,$y,$black);
-    }
-}
+	$inputData = fread($fp, 4);
+	$value = unpack('N', $inputData);
+	$lineData = substr(bigdecbin($value[1]),-32);
+	//$lineData = bigdecbin($value[1]);
+	//echo 'line: len:'.strlen(bigdecbin($value[1])).'- '.$lineData.'<br>';
+	for($x=-1;$x<32;$x++){
+		if(substr($lineData,$x,1)=="1"){
+			imagesetpixel($vms_image,$x+1,$y,$black);
+		}
+	}
 }
 
 //printf('name:%s image:%d color:%d',$vms_name,$offsetImage[1],$offsetImageColor[1]);

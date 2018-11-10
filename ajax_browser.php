@@ -32,14 +32,14 @@ function setupBasic($hash) {
 	$offsetImageColor = unpack("L",fread($fp,4));
 	fseek($fp,$offsetImage[1]);
 	for($y=0;$y<32;$y++){
-	$inputData = fread($fp, 4);
-	$value = unpack('N', $inputData);
-	$lineData = bigdecbin($value[1]);
-	for($x=-1;$x<32;$x++){
-		if(substr($lineData,$x,1)=="1"){
-		imagesetpixel($vms_image,$x+1,$y,$black);
+		$inputData = fread($fp, 4);
+		$value = unpack('N', $inputData);
+		$lineData = substr(bigdecbin($value[1]),-32);
+		for($x=-1;$x<32;$x++){
+			if(substr($lineData,$x,1)=="1"){
+				imagesetpixel($vms_image,$x+1,$y,$black);
+			}
 		}
-	}
 	}
 
 	fseek($fp,$offsetImageColor[1]);

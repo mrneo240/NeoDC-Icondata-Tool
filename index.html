@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Icondata Tool</title>
+    <meta charset="utf-8">
+    <meta content="NeoDC/HaydenK." name="author">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Josefin+Sans:300,300i,400" rel="stylesheet">
+    <link href="page.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="topBar">
+            <div class="topBarBottom">
+                <h2>Dreamcast VMU Icondata Creator</h2>
+            </div>
+        </header>
+        <main>
+            <div class="select">
+                <div style="display: flex;">
+                    <div style="flex: 1">
+                        <p>
+                            <h3>Select File: </h3><input type="file" id="_file"> <input type="button" id="_submit" value="Upload!"></p>
+                        <div class="progress_outer">
+                            <div id="_progress" class="progress"></div>
+                        </div>
+                    </div>
+                    <div style="flex: 1;height: 48px;line-height: 48px;white-space: nowrap;" id="status"></div>
+                </div>
+            </div>
+            <div id="vmu" style="visibility: hidden;">
+                <div style="display:flex; width:100%">
+                    <div style="flex: 1">
+                        <h3>Image Previews</h3>
+                        <div id="Previews" style="display: flex;">
+                            <div id="ImgPreview"></div>
+                            <div id="bwPreview"></div>
+                        </div>
+                    </div>
+                    <div style="flex: 1">
+                        <h3>Grayscale Adjust</h3>
+                        <div class="slidecontainer">
+                            <input type="range" min="1" max="15" value="8" class="slider" id="myRange">
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; width:100%">
+                    <div style="flex: 0.1">
+                        <h3>Invert</h3>
+                        <label class="container">
+			<input type="checkbox" checked="checked" id="myCheck" onclick="updateBWImgHTML()">
+			<span class="checkmark"></span>
+		</label>
+                    </div>
+                    <div class="v"></div>
+                    <div style="flex:1">
+                        <h3>Palette</h3>
+                        <div id="palette"></div>
+                    </div>
+                </div>
+                <form id="form" name="form">
+                    <input id="submit" onclick="saveVMU()" class="button" value="Submit">
+
+                </form>
+                <div id="save"></div>
+            </div>
+    </div>
+    </main>
+    <script src="ajax.js"></script>
+    <script src="upload.js"></script>
+</body>
+
+</html>

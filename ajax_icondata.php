@@ -220,32 +220,38 @@ function saveVMU() {
 	fwrite($fp,$data2);
 	}
 	//Write Color Palette
+	$fPAL = fopen('.//upload//'.$folder.'//'.'PALLETTE.BIN','w');
 	for($x=0;$x<16;$x++){
-	fwrite($fp,pack("H*",(isset($palette_Raw[$x])) ? $palette_Raw[$x] : "0000" ));
+		fwrite($fp,pack("H*",(isset($palette_Raw[$x])) ? $palette_Raw[$x] : "0000" ));
+		fwrite($fPAL,pack("H*",(isset($palette_Raw[$x])) ? $palette_Raw[$x] : "0000" ));
 	}
-	
+	fclose($fPAL);
+	$fPAL = fopen('.//upload//'.$folder.'//'.'IMAGE.BIN','w');
 	for ($y=0;$y<32;$y++) {
-    for ($x=0;$x<16; $x++) {
-        $temp = "";
-        //nibble high;
-        $rgb = imagecolorat($image, $x*2, $y);
-        $r = ($rgb >> 16) & 0xFF;
-        $g = ($rgb >> 8 ) & 0xFF;
-        $b = $rgb & 0xFF;
-        $color_rgb = sprintf('%02X%02X%02X',$r,$g,$b);
-        $match = findColorMatch($color_rgb,$palette);
-        $temp .= (string)dechex($match);
-         //nibble low;
-        $rgb = imagecolorat($image, ($x*2)+1, $y);
-        $r = ($rgb >> 16) & 0xFF;
-        $g = ($rgb >> 8 ) & 0xFF;
-        $b = $rgb & 0xFF;
-         $color_rgb = sprintf('%02X%02X%02X',$r,$g,$b);
-        $match = findColorMatch($color_rgb, $palette);
-       $temp .= (string)dechex($match);
-        fwrite($fp,pack("H*",$temp));
-    }
-}
+		for ($x=0;$x<16; $x++) {
+			$temp = "";
+			//nibble high;
+			$rgb = imagecolorat($image, $x*2, $y);
+			$r = ($rgb >> 16) & 0xFF;
+			$g = ($rgb >> 8 ) & 0xFF;
+			$b = $rgb & 0xFF;
+			$color_rgb = sprintf('%02X%02X%02X',$r,$g,$b);
+			$match = findColorMatch($color_rgb,$palette);
+			$temp .= (string)dechex($match);
+			 //nibble low;
+			$rgb = imagecolorat($image, ($x*2)+1, $y);
+			$r = ($rgb >> 16) & 0xFF;
+			$g = ($rgb >> 8 ) & 0xFF;
+			$b = $rgb & 0xFF;
+			 $color_rgb = sprintf('%02X%02X%02X',$r,$g,$b);
+			$match = findColorMatch($color_rgb, $palette);
+		   $temp .= (string)dechex($match);
+			fwrite($fp,pack("H*",$temp));
+			fwrite($fPAL,pack("H*",$temp));
+		}
+	
+	}
+	fclose($fPAL);
 	//pad out i guess
 	for ($y=0;$y<320;$y++) {
 	fwrite($fp,pack("H*","1A"));
