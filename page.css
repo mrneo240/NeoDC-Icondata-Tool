@@ -10,6 +10,10 @@ html {box-sizing: border-box;}
 div#vmu img {
 	    padding-right: 1em;
 }
+.topBarBottom {
+    display: block;
+    text-align: center;
+}
 
 .topBarBottom h2 {
 	vertical-align: middle;
@@ -20,7 +24,15 @@ div#vmu img {
     font-style: bold;
     font-family: 'Josefin Sans', sans-serif;
     text-shadow: 2px 3px 0 rgba(0,0,0,0.16);
-	text-align:center;
+    text-align:center;
+    font-size: 28px;
+}
+.topBarBottom a {
+    color: #212121;
+    font-family: 'Josefin Sans', sans-serif;
+    text-shadow: 2px 3px 0 rgba(0,0,0,0.16);
+    text-align: center;
+    font-size: 18px;
 }
 main {
 	margin: 0 auto;

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Icondata Tool</title>
     <meta charset="utf-8">
@@ -9,29 +8,37 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto|Josefin+Sans:300,300i,400" rel="stylesheet">
     <link href="page.css" rel="stylesheet">
 </head>
-
 <body>
-    <div class="wrapper">
-        <header class="topBar">
-            <div class="topBarBottom">
-                <h2>Dreamcast VMU Icondata Combiner</h2>
-            </div>
-        </header>
-        <main>
-                
-                <form id="form" name="form" style="display: flex;flex-direction: column;">
-				<label for="title">Black and White Icon: </label><br>
-				<input style="flex:1;" maxlength="40" name="title" id="bw" placeholder="7a27ff3c6b32cf67b5465f53877dfc6c11948afd" type="text">
-				<label for="title">Color Icon: </label><br>
-				<input style="flex:1;" maxlength="40" name="title" id="color" placeholder="e0f21d6c2e4b53b862b9d3602dc2626a31bf0478" type="text">
-                    <input id="submit" onclick="combineVMU()" class="button" value="Submit">
-
-                </form>
-                <div id="save"></div>
-     </main>
-	 </div>
-    <script src="ajax.js"></script>
-    <script src="upload.js"></script>
-</body>
-
+    <body>
+        <div class="wrapper">
+            <header class="topBar">
+                <div class="topBarBottom">
+                    <h2>Dreamcast VMU Icondata Creator</h2>
+                </div>
+                <div class="topBarBottom">
+                    <a href="index.html">Icon Creator</a>
+                    <span style="margin: 1em;font-size: 18px;">&nbsp;</span>
+                    <a href="Combine.html">Combine 2 seperate icons</a>
+                    <span style="margin: 1em;font-size: 18px;">&nbsp;</span>
+                    <a href="browser.html">Image Gallery</a>
+                </div>
+            </header>
+            <main>
+                <div class="select">
+                    <form id="form" name="form" style="display: flex;flex-direction: column;">
+                        <label for="title">Black and White Icon: </label>
+                        <br>
+                        <input style="flex:1;" maxlength="40" name="title" id="bw" placeholder="7a27ff3c6b32cf67b5465f53877dfc6c11948afd" type="text">
+                        <label for="title">Color Icon: </label>
+                        <br>
+                        <input style="flex:1;" maxlength="40" name="title" id="color" placeholder="e0f21d6c2e4b53b862b9d3602dc2626a31bf0478" type="text">
+                        <input id="submit" onclick="combineVMU()" class="button" value="Submit">
+                    </form>
+                    <div id="save"></div>
+                </div>
+            </main>
+        </div>
+        <script src="ajax.js"></script>
+        <script src="upload.js"></script>
+    </body>
 </html>
