@@ -16,6 +16,7 @@ var palette = document.getElementById("palette");
 var bwPreview = document.getElementById("bwPreview");
 var ImgPreview = document.getElementById("ImgPreview");
 var save = document.getElementById("save");
+var preview = document.getElementById("previews");
 
 var uploadedName = "";
 var rawName = "";
@@ -76,6 +77,17 @@ function AjaxPost(ajaxURL, parameters, onComplete) {
     http3.open("POST", ajaxURL, true);
     http3.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http3.send(encodeURI(parameters));
+}
+
+function showGallery() {
+    function updateBWImg(response) {
+        preview.innerHTML = response;
+    }
+    var imgParams = {
+        "cmd": "getAll"
+    };
+    AjaxPost("ajax_browser.php", imgParams, updateBWImg);
+
 }
 
 function updateBWImgHTML() {

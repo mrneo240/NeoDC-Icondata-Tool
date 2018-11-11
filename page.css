@@ -26,6 +26,12 @@ main {
 	margin: 0 auto;
 	width: 80%;
 }
+a {
+    font-family: "Roboto";
+    font-size: 14px;
+    color: #212121;
+    font-weight: 600;
+}
 
 body {
     background-color: #ECECEC;

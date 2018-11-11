@@ -130,15 +130,18 @@ function getIconColor(){
 	if (isset($_REQUEST['hash'])) { $hash = $_REQUEST['hash'];}
 	echo getColorIcon($hash);
 }
-
-$dir = new DirectoryIterator('./upload');
-foreach ($dir as $fileinfo) {
-	if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-		echo '<div style="padding: 1em;"><a href="./upload/'.$fileinfo->getFilename().'/tmp.zip">';
-    echo getBWIcon($fileinfo->getFilename()).'<br>';
-    echo getColorIcon($fileinfo->getFilename()).'<br>';
-	echo '</a></div>';
-	}
+function getAllImages(){
+    $dir = new DirectoryIterator('./upload');
+    foreach ($dir as $fileinfo) {
+        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+            echo '<div style="padding: 1em;">';
+            echo '<div style="display:flex;">';
+        echo getColorIcon($fileinfo->getFilename()).'<br>';
+        echo getBWIcon($fileinfo->getFilename()).'<br>';
+        echo '</div><div>';
+        echo '<a style="float:left;" href="./upload/'.$fileinfo->getFilename().'/tmp.zip">ICONDATA</a><span style="width:10px;">&nbsp;</span><a style="float:right;" href="./upload/'.$fileinfo->getFilename().'/vmu.zip">extras</a></div></div>';
+        }
+    }
 }
 
 // Report all PHP errors (see changelog)
@@ -155,6 +158,8 @@ switch($command){
 	case "getIconBW":
 	getIconBW();
 	break;
+    case "getAll":
+    getAllImages();
     default:
     break;
 }

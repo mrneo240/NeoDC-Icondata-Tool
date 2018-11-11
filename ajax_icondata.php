@@ -102,9 +102,8 @@ function image2BW($im) {
             $g = ($rgb >> 8 ) & 0xFF;
             $b = $rgb & 0xFF;
             $gray = ($r* 0.299 + $g* 0.587 + $b* 0.114) ;
-            //$gray = ($r + $g+ $b)/3 ;
 			$threshold = 0x66;
-			if (isset($_REQUEST['threshold'])) { $threshold = ($_REQUEST['threshold']-1)*0x11;}
+			if (isset($_REQUEST['threshold'])) { $threshold = ($_REQUEST['threshold'])*0x11;}
             if ($gray < $threshold) {
                 imagesetpixel($im, $x, $y, 0xFFFFFF);
                 $data_string .= "1";
@@ -140,8 +139,81 @@ function findColorMatch($colorInput, $palette){
     return array_search($selectedColor,$palette);
 }
 
+function safeAccess($_x, $_y, $val){
+    global $img_arr;
+    if($_x < 32 && $_x >= 0){
+        if($_y < 32 && $_y >= 0){
+        $img_arr[$_x][$_y] += $val;
+        }
+    }
+}
+function doDither(){
+    global $img_tmp, $img_arr, $output;
+    $imageBW = $img_tmp;
+    $output = imagecreatetruecolor(imagesx($imageBW), imagesy($imageBW));
+    $img_arr = array();
+    for ($y = imagesy($imageBW); $y--;) {
+       for ($x =0;$x< imagesx($imageBW); $x++) {
+            $rgb = imagecolorat($imageBW, $x, $y);
+            $r = ($rgb >> 16) & 0xFF;
+            $g = ($rgb >> 8 ) & 0xFF;
+            $b = $rgb & 0xFF;
+            $gray = ($r* 0.299 + $g* 0.587 + $b* 0.114) ;
+            $color = imagecolorallocate($output,$gray, $gray, $gray);
+            $img_arr[$x][$y] = $color;
+            imagesetpixel($output, $x, $y, $color);
+        }
+    }
+    imagefilter($output, IMG_FILTER_NEGATE); 
+    $white = imagecolorallocate($output, 0xff, 0xff, 0xff);
+    $black = imagecolorallocate($output, 0,0,0);
+$threshold = 0.5;
+if (isset($_REQUEST['threshold'])) { $threshold = ($_REQUEST['threshold'])/30;}
+
+for($y=0; $y < 32; $y++){
+    for($x=0; $x < 32; $x++){
+        $old = $img_arr[$x][$y];
+        if($old < 0xffffff*($threshold)){
+            $new = 0x000000;
+            imagesetpixel($output, $x, $y, $white);
+        }else{
+            $new = 0xffffff;
+        }
+        $quant_error = $old-$new;
+        $error_diffusion = (1/8)*$quant_error;
+        safeAccess($x+1,$y,$error_diffusion);
+        safeAccess($x+2,$y,$error_diffusion);
+        safeAccess($x-1,$y+1,$error_diffusion);
+        safeAccess($x,$y+1,$error_diffusion);
+        safeAccess($x+1,$y+1,$error_diffusion);
+        safeAccess($x,$y+2,$error_diffusion);
+    }
+}
+
+$threshold = 0x66;
+        if (isset($_REQUEST['threshold'])) { $threshold = ($_REQUEST['threshold']-1)*0x11;}
+ 
+for($y=0; $y < 32; $y++){
+    for($x=0; $x < 32; $x++){
+        $rgb = imagecolorat($output, $x, $y);
+        $gray = $rgb & 0xFF;
+        if ( $gray < 0xff-$threshold) {
+            imagesetpixel($output, $x, $y, $black);
+        }else{
+            imagesetpixel($output, $x, $y, $white);
+        }
+    }
+}
+$invert = 1;
+if (isset($_REQUEST['invert'])) { $invert = $_REQUEST['invert'];}
+if($invert){
+imagefilter($output, IMG_FILTER_NEGATE);
+}    
+
+}
+
 function setupBasic() {
-	global $imageBW, $image_data, $img, $image_binary, $image, $img_tmp, $image_color, $palette,$palette_Raw;
+	global $imageBW, $image_data, $image_data_2, $img, $image_binary, $image, $img_tmp, $image_color, $palette,$palette_Raw, $output;
 	$img = 'watermelon.png';
 	if (isset($_REQUEST['img'])) { $img = $_REQUEST['img'];}
 	$image = @imagecreatefromstring(file_get_contents($img));
@@ -154,16 +226,23 @@ function setupBasic() {
 	ob_end_clean();
 	$imageBW = @imagecreatefromstring(file_get_contents($img));
 	$img_tmp = imagecreatetruecolor(32, 32);
-	imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
+    imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
+    doDither();
 	$imageBW = $img_tmp;
 	$detect_levels = 2;
 	if (isset($_REQUEST['levels'])) { $detect_levels = $_REQUEST['levels'];}
 	detectColors($img,16,$detect_levels,$palette,$palette_Raw);
+    
 	image2BW($imageBW);
 	ob_start();
 	imagepng($imageBW);
 	$image_data = ob_get_contents();
 	ob_end_clean();
+    ob_start();
+	imagepng($output);
+	$image_data_2 = ob_get_contents();
+	ob_end_clean();
+
 }
 
 $palette = array();
@@ -181,12 +260,14 @@ function getPalette() {
 }
 
 function getBWPreview() {
-	global $palette, $imageBW, $image_data, $img_tmp;
+	global $palette, $imageBW, $image_data, $image_data_2, $img_tmp;
 	
 	setupBasic();
 	//Output the stuff
 	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
-	'src="data:image/png;base64,'.base64_encode($image_data).'" alt="Red dot" /><br><br>';
+	'src="data:image/png;base64,'.base64_encode($image_data).'" alt="Red dot" />';
+	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
+	'src="data:image/png;base64,'.base64_encode($image_data_2).'" alt="Red dot" /><br><br>';
 }
 function getImgPreview() {
 	global $img, $image_color;
