@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Icondata Tool</title>
     <meta charset="utf-8">
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto|Josefin+Sans:300,300i,400" rel="stylesheet">
     <link href="page.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="wrapper">
         <header class="topBar">
@@ -56,11 +58,20 @@
                 </div>
                 <div style="display:flex; width:100%">
                     <div style="flex: 0.1">
-                        <h3>Invert</h3>
-                        <label class="container">
-                            <input type="checkbox" checked="checked" id="myCheck" onclick="updateBWImgHTML()">
-                            <span class="checkmark"></span>
-                        </label>
+                        <div style="float: left;margin: 0px 10px 10px 10px;">
+                            <h3>Invert</h3>
+                            <label class="container">
+                                <input type="checkbox" checked="checked" id="myCheck" onclick="updateBWImgHTML()">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div style="float: left;margin: 0px 10px 10px 10px;">
+                            <h3>Dither</h3>
+                            <label class="container">
+                                <input type="checkbox" id="myDither" onclick="updateBWImgHTML()">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="v"></div>
                     <div style="flex:1">
@@ -70,7 +81,6 @@
                 </div>
                 <form id="form" name="form">
                     <input id="submit" onclick="saveVMU()" class="button" value="Submit">
-
                 </form>
                 <div id="save"></div>
             </div>
@@ -79,4 +89,5 @@
     <script src="ajax.js"></script>
     <script src="upload.js"></script>
 </body>
+
 </html>

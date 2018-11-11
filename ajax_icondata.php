@@ -227,22 +227,25 @@ function setupBasic() {
 	$imageBW = @imagecreatefromstring(file_get_contents($img));
 	$img_tmp = imagecreatetruecolor(32, 32);
     imagecopyresampled($img_tmp, $image, 0, 0, 0, 0, 32, 32, imagesx($image), imagesy($image));
+    $dither = 1;
+if (isset($_REQUEST['dither'])) { $dither= $_REQUEST['dither'];}
+if($dither){
     doDither();
+}   
 	$imageBW = $img_tmp;
 	$detect_levels = 2;
 	if (isset($_REQUEST['levels'])) { $detect_levels = $_REQUEST['levels'];}
 	detectColors($img,16,$detect_levels,$palette,$palette_Raw);
     
-	image2BW($imageBW);
-	ob_start();
-	imagepng($imageBW);
-	$image_data = ob_get_contents();
-	ob_end_clean();
+    image2BW($imageBW);
     ob_start();
-	imagepng($output);
-	$image_data_2 = ob_get_contents();
-	ob_end_clean();
-
+    if($dither){
+        imagepng($output);
+    } else {
+        imagepng($imageBW);
+    }
+    $image_data = ob_get_contents();
+        ob_end_clean();
 }
 
 $palette = array();
@@ -266,8 +269,6 @@ function getBWPreview() {
 	//Output the stuff
 	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
 	'src="data:image/png;base64,'.base64_encode($image_data).'" alt="Red dot" />';
-	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
-	'src="data:image/png;base64,'.base64_encode($image_data_2).'" alt="Red dot" /><br><br>';
 }
 function getImgPreview() {
 	global $img, $image_color;

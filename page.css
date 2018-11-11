@@ -124,6 +124,7 @@ body {
   height: 48px;
   width: 48px;
   background-color: #eee;
+  border-style: solid;
 }
 
 /* On mouse-over, add a grey background color */
