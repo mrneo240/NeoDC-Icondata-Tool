@@ -105,7 +105,7 @@ function getBWIcon($hash){
 	}
 	 
 	//is icon already made?
-	if(!is_file($file)){
+	//if(!is_file($file)){
 		setupBasic($hash);
 		//output and capture to file
 		ob_start();
@@ -115,7 +115,7 @@ function getBWIcon($hash){
 		//Save our content to the file.
 		imagedestroy( $vms_image);
 		file_put_contents($file, $image_data);
-	}
+	//}
 	return '<img width=64 height=64 style="image-rendering: pixelated" src="'.$file.'" alt="color image" />';
 }
 
