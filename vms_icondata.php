@@ -81,7 +81,7 @@ ob_start();
 imagepng($vms_image_Color);
 $image_data_Color = ob_get_contents();
 ob_end_clean();
-echo '<br><br><img width=64 height=64 style="image-rendering: pixelated" 
+echo '<img width=64 height=64 style="image-rendering: pixelated" 
 src="data:image/png;base64,'.base64_encode($image_data).'" alt="bw image" />
 <img width=64 height=64 style="image-rendering: pixelated" 
 src="data:image/png;base64,'.base64_encode($image_data_Color).'" alt="color image" />';

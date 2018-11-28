@@ -258,11 +258,9 @@ function getPalette() {
 	global $palette;
 	setupBasic();
 
-	echo '<table><tr>';
-	foreach($palette as $color) {
-		echo '<td style="background:#' . $color . '; width:36px;height:48px;"><span style="font-weight:bold">#'.$color.'</span></td>';
-	}
-	echo '</tr></table>';
+    foreach($palette as $color) {
+		echo '<div style="background:#' . $color . ';"><div><p style="font-weight:bold;">#' . $color . '</p></div></div>';
+    }
 }
 
 function getBWPreview() {
@@ -279,7 +277,7 @@ function getImgPreview() {
 	setupBasic();
 	echo '<img width=128 height=128 style="image-rendering: pixelated" src="' . $img . '" />';
 	echo '<img width=128 height=128 style="image-rendering: pixelated" '.
-	'src="data:image/png;base64,'.base64_encode($image_color).'" alt="Red dot" /><br><br>';
+	'src="data:image/png;base64,'.base64_encode($image_color).'" alt="Red dot" />';
 }
 
 function saveVMU() {

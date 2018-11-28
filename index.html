@@ -27,7 +27,7 @@
         <main>
             <div class="select">
                 <div style="display: flex;">
-                    <div style="flex: 1">
+                    <div style="flex: 5">
                         <p>
                             <h3>Select File: </h3>
                             <input type="file" id="_file">
@@ -37,35 +37,35 @@
                             <div id="_progress" class="progress"></div>
                         </div>
                     </div>
-                    <div style="flex: 1;height: 48px;line-height: 48px;white-space: nowrap;" id="status"></div>
+                    <div style="flex: 1;height: 48px;line-height: 48px;white-space: nowrap;overflow: hidden;" id="status"></div>
                 </div>
             </div>
             <div id="vmu" style="visibility: hidden;">
-                <div style="display:flex; width:100%">
-                    <div style="flex: 1">
+                <div>
+                    <div>
                         <h3>Image Previews</h3>
-                        <div id="Previews" style="display: flex;">
+                        <div id="Previews">
                             <div id="ImgPreview"></div>
                             <div id="bwPreview"></div>
                         </div>
                     </div>
-                    <div style="flex: 1">
+                    <div>
                         <h3>Grayscale Adjust</h3>
                         <div class="slidecontainer">
                             <input type="range" min="1" max="15" value="8" class="slider" id="myRange">
                         </div>
                     </div>
                 </div>
-                <div style="display:flex; width:100%">
-                    <div style="flex: 0.1">
-                        <div style="float: left;margin: 0px 10px 10px 10px;">
+                <div style="display: table">
+                    <div style="display:table">
+                        <div style="float:left;margin: 0px 10px 10px 10px;">
                             <h3>Invert</h3>
                             <label class="container">
                                 <input type="checkbox" checked="checked" id="myCheck" onclick="updateBWImgHTML()">
                                 <span class="checkmark"></span>
                             </label>
                         </div>
-                        <div style="float: left;margin: 0px 10px 10px 10px;">
+                        <div style="float:left;margin: 0px 10px 10px 10px;">
                             <h3>Dither</h3>
                             <label class="container">
                                 <input type="checkbox" id="myDither" onclick="updateBWImgHTML()">
@@ -73,10 +73,11 @@
                             </label>
                         </div>
                     </div>
-                    <div class="v"></div>
-                    <div style="flex:1">
-                        <h3>Palette</h3>
-                        <div id="palette"></div>
+                    <div style="margin-top: 2em;">
+                        <div style="margin: 0px 10px 10px 10px;">
+                            <h3>Palette</h3>
+                         <div id="palette"></div>
+                         </div>
                     </div>
                 </div>
                 <form id="form" name="form">
