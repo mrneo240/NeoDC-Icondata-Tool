@@ -32,14 +32,14 @@ function setupBasic($hash) {
 	$offsetImageColor = unpack("L",fread($fp,4));
 	fseek($fp,$offsetImage[1]);
 	for($y=0;$y<32;$y++){
-	$inputData = fread($fp, 4);
-	$value = unpack('N', $inputData);
-	$lineData = bigdecbin($value[1]);
-	for($x=-1;$x<32;$x++){
-		if(substr($lineData,$x,1)=="1"){
-		imagesetpixel($vms_image,$x+1,$y,$black);
+		$inputData = fread($fp, 4);
+		$value = unpack('N', $inputData);
+		$lineData = substr(bigdecbin($value[1]),-32);
+		for($x=-1;$x<32;$x++){
+			if(substr($lineData,$x,1)=="1"){
+				imagesetpixel($vms_image,$x+1,$y,$black);
+			}
 		}
-	}
 	}
 
 	fseek($fp,$offsetImageColor[1]);
@@ -105,7 +105,7 @@ function getBWIcon($hash){
 	}
 	 
 	//is icon already made?
-	if(!is_file($file)){
+	//if(!is_file($file)){
 		setupBasic($hash);
 		//output and capture to file
 		ob_start();
@@ -115,7 +115,7 @@ function getBWIcon($hash){
 		//Save our content to the file.
 		imagedestroy( $vms_image);
 		file_put_contents($file, $image_data);
-	}
+	//}
 	return '<img width=64 height=64 style="image-rendering: pixelated" src="'.$file.'" alt="color image" />';
 }
 
@@ -130,15 +130,18 @@ function getIconColor(){
 	if (isset($_REQUEST['hash'])) { $hash = $_REQUEST['hash'];}
 	echo getColorIcon($hash);
 }
-
-$dir = new DirectoryIterator('./upload');
-foreach ($dir as $fileinfo) {
-	if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-		echo '<div style="padding: 1em;"><a href="./upload/'.$fileinfo->getFilename().'/tmp.zip">';
-    echo getBWIcon($fileinfo->getFilename()).'<br>';
-    echo getColorIcon($fileinfo->getFilename()).'<br>';
-	echo '</a></div>';
-	}
+function getAllImages(){
+    $dir = new DirectoryIterator('./upload');
+    foreach ($dir as $fileinfo) {
+        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+            echo '<div style="padding: 1em;">';
+            echo '<div style="display:flex;">';
+        echo getColorIcon($fileinfo->getFilename()).'<br>';
+        echo getBWIcon($fileinfo->getFilename()).'<br>';
+        echo '</div><div>';
+        echo '<a style="float:left;" href="./upload/'.$fileinfo->getFilename().'/tmp.zip">ICONDATA</a><span style="width:10px;">&nbsp;</span><a style="float:right;" href="./upload/'.$fileinfo->getFilename().'/vmu.zip">extras</a></div></div>';
+        }
+    }
 }
 
 // Report all PHP errors (see changelog)
@@ -155,6 +158,8 @@ switch($command){
 	case "getIconBW":
 	getIconBW();
 	break;
+    case "getAll":
+    getAllImages();
     default:
     break;
 }

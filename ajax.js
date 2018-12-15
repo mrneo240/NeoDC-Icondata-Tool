@@ -16,6 +16,7 @@ var palette = document.getElementById("palette");
 var bwPreview = document.getElementById("bwPreview");
 var ImgPreview = document.getElementById("ImgPreview");
 var save = document.getElementById("save");
+var preview = document.getElementById("previews");
 
 var uploadedName = "";
 var rawName = "";
@@ -78,6 +79,17 @@ function AjaxPost(ajaxURL, parameters, onComplete) {
     http3.send(encodeURI(parameters));
 }
 
+function showGallery() {
+    function updateBWImg(response) {
+        preview.innerHTML = response;
+    }
+    var imgParams = {
+        "cmd": "getAll"
+    };
+    AjaxPost("ajax_browser.php", imgParams, updateBWImg);
+
+}
+
 function updateBWImgHTML() {
     var myNode = document.getElementById("save");
     while (myNode.firstChild) {
@@ -91,7 +103,8 @@ function updateBWImgHTML() {
         "cmd": "getBWPreview",
         "threshold": slider.value,
         "img": window.uploadedName,
-        "invert": document.getElementById("myCheck").checked ? "1" : "0"
+        "invert": document.getElementById("myCheck").checked ? "1" : "0",
+        "dither": document.getElementById("myDither").checked ? "1" : "0"
     };
     AjaxPost("ajax_icondata.php", imgParams, updateBWImg);
 
@@ -106,6 +119,7 @@ function saveVMU() {
         "threshold": slider.value,
         "img": window.uploadedName,
         "invert": document.getElementById("myCheck").checked ? "1" : "0",
+        "dither": document.getElementById("myDither").checked ? "1" : "0",
 		"folder": window.rawName
     };
 
@@ -143,7 +157,8 @@ function setupBasics() {
         "cmd": "getPalette",
         "threshold": slider.value,
         "img": window.uploadedName,
-        "invert": document.getElementById("myCheck").checked ? "1" : "0"
+        "invert": document.getElementById("myCheck").checked ? "1" : "0",
+        "dither": document.getElementById("myDither").checked ? "1" : "0"
     };
     AjaxPost("ajax_icondata.php", imgParams, updatePalette);
 
@@ -155,7 +170,8 @@ function setupBasics() {
         "cmd": "getImgPreview",
         "threshold": slider.value,
         "img": window.uploadedName,
-        "invert": document.getElementById("myCheck").checked ? "1" : "0"
+        "invert": document.getElementById("myCheck").checked ? "1" : "0",
+        "dither": document.getElementById("myDither").checked ? "1" : "0"
     };
     AjaxPost("ajax_icondata.php", imgParams, updateImg);
 
