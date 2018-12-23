@@ -20,7 +20,7 @@ var save = document.getElementById("save");
 var uploadedName = "";
 var rawName = "";
 
-slider.oninput = function() {
+slider.oninput = function () {
     updateBWImgHTML();
 }
 
@@ -37,7 +37,7 @@ function createAjaxRequestObject() {
     return xmlhttp;
 }
 function encodeURI(parameters) {
-	var parameterString = "";
+    var parameterString = "";
     var isFirst = true;
     for (var index in parameters) {
         if (!isFirst) {
@@ -46,12 +46,12 @@ function encodeURI(parameters) {
         parameterString += encodeURIComponent(index) + "=" + encodeURIComponent(parameters[index]);
         isFirst = false;
     }
-	return parameterString;
+    return parameterString;
 }
 function AjaxPost(ajaxURL, parameters, onComplete) {
     var http3 = createAjaxRequestObject();
 
-    http3.onreadystatechange = function() {
+    http3.onreadystatechange = function () {
         if (http3.readyState == 4) {
             if (http3.status == 200) {
                 if (onComplete) {
@@ -106,14 +106,14 @@ function saveVMU() {
         "threshold": slider.value,
         "img": window.uploadedName,
         "invert": document.getElementById("myCheck").checked ? "1" : "0",
-		"folder": window.rawName
+        "folder": window.rawName
     };
 
-	//display and save.
+    //display and save.
     //AjaxPost("ajax_icondata.php", parameters, completedAJAX);
-	
-	//download as zip
-	window.open("ajax_icondata.php?"+encodeURI(parameters));
+
+    //download as zip
+    window.open("ajax_icondata.php?" + encodeURI(parameters));
 }
 
 function combineVMU() {
@@ -126,11 +126,11 @@ function combineVMU() {
         "color": document.getElementById("color").value
     };
 
-	//display and save.
+    //display and save.
     //AjaxPost("ajax_icondata.php", parameters, completedAJAX);
-	
-	//download as zip
-	window.open("ajax_combine.php?"+encodeURI(parameters));
+
+    //download as zip
+    window.open("ajax_combine.php?" + encodeURI(parameters));
 }
 
 

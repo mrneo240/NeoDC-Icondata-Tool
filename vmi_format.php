@@ -42,7 +42,7 @@ $header_format =
     return $header;
 }
 
-function createVMI($desc,$filename){
+function createVMI($desc,$filename, $folder = './/'){
     $header_format =
         'A4'. //="SEGA" AND sub(VMSName,4);
         'a32'.
@@ -63,23 +63,23 @@ function createVMI($desc,$filename){
         'L'; //in bytes  
         
     $filename_orig = $filename;
-    $filename = str_pad(strtoupper(substr($filename,0,8)),8,"_");
-    $fp = fopen($filename.'.VMI', 'w');
+    $filename = formatFilename($filename);
+    $fp = fopen($folder.$filename.'.VMI', 'w');
     
     $checksumInput = unpack("H2a/H2b/H2c/H2d","SEGA");
     $checksumData = unpack("H2a/H2b/H2c/H2d",$filename);
     $desc['Checksum'] = 
-    chr(hexdec($checksumInput[a]) & hexdec($checksumData[a])).
-    chr(hexdec($checksumInput[b]) & hexdec($checksumData[b])).
-    chr(hexdec($checksumInput[c]) & hexdec($checksumData[c])).
-    chr(hexdec($checksumInput[d]) & hexdec($checksumData[d]));
+    chr(hexdec($checksumInput['a']) & hexdec($checksumData['a'])).
+    chr(hexdec($checksumInput['b']) & hexdec($checksumData['b'])).
+    chr(hexdec($checksumInput['c']) & hexdec($checksumData['c'])).
+    chr(hexdec($checksumInput['d']) & hexdec($checksumData['d']));
 
     $date = getdate();
     
     $data = pack($header_format,
                 $desc['Checksum'],
-                str_pad(substr($desc['Description'],0,32),32),
-                str_pad(substr($desc['Copyright'],0,32),32),
+                substr($desc['Description'],0,32),
+                substr($desc['Copyright'],0,32),
                 $date['year'],
                 $date['mon'],
                 $date['mday'],
@@ -88,12 +88,12 @@ function createVMI($desc,$filename){
                 $date['seconds'],
                 $date['wday'],
                 0, //dont touch
-                0, //dont touch
+                1, //dont touch
                 $filename,
-                $filename.".VMS",
+                $desc['vmuFilename'],
                 0, //dont touch
                 0, //dont touch
-                filesize($filename_orig.".VMS"));
+                filesize($folder.$filename_orig.".VMS"));
                 
     fwrite($fp,$data);
     fclose($fp);
@@ -192,16 +192,18 @@ $cpy = 'NeoDC';
 if (isset($_REQUEST['cpy'])) { $cpy = $_REQUEST['cpy'];}
 $name = 'SONIC';
 if (isset($_REQUEST['name'])) { $name = $_REQUEST['name'];}
+$vmu = 'FILE.SYS';
+if (isset($_REQUEST['vmu'])) { $vmu = $_REQUEST['vmu'];}
 
 //Create a VMI like this, the second argument is the VMS filename(max length 8)
 //make sure the vms exists, rename after generation if nessecary to match the VMI
 $vmiDescription = array('Checksum' => '0000', //dont touch
                         'Description' => $desc, //up to 32 characters
-                        'Copyright'=> $cpy); //up to 32 characters
+                        'Copyright'=> $cpy,
+                        'vmuFilename'=> $vmu); //up to 32 characters
 //Generate a .VMI for the file "SONIC.VMS"
  createVMI($vmiDescription, $name);
  echo $name.'.VMI Written successfully<br>';
- print_r($vmiDescription);
 }
 
 function writeVMI_ICON($folder){
