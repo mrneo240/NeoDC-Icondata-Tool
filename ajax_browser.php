@@ -9,9 +9,8 @@ Redistribution and use in source and binary forms, with or without modification,
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 //Project Lives at: https://github.com/mrneo240/NeoDC-Icondata-Tool
-
 require_once 'util.php';
 
 function setupBasic($hash)
@@ -33,7 +32,7 @@ function setupBasic($hash)
     for ($y = 0; $y < 32; $y++) {
         $inputData = fread($fp, 4);
         $value = unpack('N', $inputData);
-        $lineData = bigdecbin($value[1]);
+        $lineData = substr(bigdecbin($value[1]), -32);
         for ($x = -1; $x < 32; $x++) {
             if (substr($lineData, $x, 1) == "1") {
                 imagesetpixel($vms_image, $x + 1, $y, $black);
@@ -106,17 +105,17 @@ function getBWIcon($hash)
     }
 
     //is icon already made?
-    if (!is_file($file)) {
-        setupBasic($hash);
-        //output and capture to file
-        ob_start();
-        imagepng($vms_image);
-        $image_data = ob_get_contents();
-        ob_end_clean();
-        //Save our content to the file.
-        imagedestroy($vms_image);
-        file_put_contents($file, $image_data);
-    }
+    //if(!is_file($file)){
+    setupBasic($hash);
+    //output and capture to file
+    ob_start();
+    imagepng($vms_image);
+    $image_data = ob_get_contents();
+    ob_end_clean();
+    //Save our content to the file.
+    imagedestroy($vms_image);
+    file_put_contents($file, $image_data);
+    //}
     return '<img width=64 height=64 style="image-rendering: pixelated" src="' . $file . '" alt="color image" />';
 }
 
@@ -133,14 +132,18 @@ function getIconColor()
     if (isset($_REQUEST['hash'])) {$hash = $_REQUEST['hash'];}
     echo getColorIcon($hash);
 }
-
-$dir = new DirectoryIterator('./upload');
-foreach ($dir as $fileinfo) {
-    if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-        echo '<div style="padding: 1em;"><a href="./upload/' . $fileinfo->getFilename() . '/tmp.zip">';
-        echo getBWIcon($fileinfo->getFilename()) . '<br>';
-        echo getColorIcon($fileinfo->getFilename()) . '<br>';
-        echo '</a></div>';
+function getAllImages()
+{
+    $dir = new DirectoryIterator('./upload');
+    foreach ($dir as $fileinfo) {
+        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+            echo '<div style="padding: 1em;">';
+            echo '<div style="display:flex;">';
+            echo getColorIcon($fileinfo->getFilename()) . '<br>';
+            echo getBWIcon($fileinfo->getFilename()) . '<br>';
+            echo '</div><div>';
+            echo '<a style="float:left;" href="./upload/' . $fileinfo->getFilename() . '/tmp.zip">ICONDATA</a><span style="width:10px;">&nbsp;</span><a style="float:right;" href="./upload/' . $fileinfo->getFilename() . '/vmu.zip">extras</a></div></div>';
+        }
     }
 }
 
@@ -158,6 +161,8 @@ switch ($command) {
     case "getIconBW":
         getIconBW();
         break;
+    case "getAll":
+        getAllImages();
     default:
         break;
 }

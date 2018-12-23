@@ -10,6 +10,13 @@ html {box-sizing: border-box;}
 div#vmu img {
 	    padding-right: 1em;
 }
+.topBarBottom {
+    display: flex;
+}
+
+.topBar {
+    padding-bottom: 1em;
+}
 
 .topBarBottom h2 {
 	vertical-align: middle;
@@ -20,11 +27,27 @@ div#vmu img {
     font-style: bold;
     font-family: 'Josefin Sans', sans-serif;
     text-shadow: 2px 3px 0 rgba(0,0,0,0.16);
-	text-align:center;
+    text-align:center;
+    font-size: 28px;
+    flex: 1;
+}
+.topBarBottom a {
+    color: #212121;
+    font-family: 'Josefin Sans', sans-serif;
+    text-shadow: 2px 3px 0 rgba(0,0,0,0.16);
+    text-align: center;
+    font-size: 18px;
+    flex: 1;
 }
 main {
 	margin: 0 auto;
 	width: 80%;
+}
+a {
+    font-family: "Roboto";
+    font-size: 14px;
+    color: #212121;
+    font-weight: 600;
 }
 
 body {
@@ -106,6 +129,7 @@ body {
   height: 48px;
   width: 48px;
   background-color: #eee;
+  border-style: solid;
 }
 
 /* On mouse-over, add a grey background color */
@@ -178,7 +202,6 @@ input {
     font-size: 16px;
     padding: 12px;
 	border: none;
-    border-bottom: 2px solid #BBDEFB;
 }
 
 textarea {
@@ -192,4 +215,18 @@ textarea {
 	font-family: "Roboto";
     font-size: 14px;
     color: #212121;
+}
+
+#Previews img,#Previews div {
+    display:inline;
+}
+
+#palette > div {
+    width:60px;height:48px;float:left;display:table-row;
+}
+#palette > div > div {
+    font-weight:bold;display:table-cell;vertical-align:middle;
+}
+#palette p {
+    -webkit-text-stroke: 0.1px white;
 }
