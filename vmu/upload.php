@@ -49,7 +49,7 @@
 foreach ($dir as $fileinfo) {
     if (!$fileinfo->isDot()) {
     if(strstr($fileinfo->getFilename(),"VMI")){
-        print('<tr><td colspan="2" align="center"><a href=uploads/"'.$fileinfo->getFilename().'">'.$fileinfo->getFilename().'</a><br></td></tr>' );
+        print('<tr><td colspan="2" align="center"><a href="uploads/'.$fileinfo->getFilename().'">'.$fileinfo->getFilename().'</a><br></td></tr>' );
     }
     }
 }

@@ -135,16 +135,19 @@ function getIconColor()
 function getAllImages()
 {
     $dir = new DirectoryIterator('./upload');
-    foreach ($dir as $fileinfo) {
+    include_once('tbs_class.php');
+    $folders = array();
+    $TBS = new clsTinyButStrong;
+    $TBS->LoadTemplate('gallery_item.htm');
+    $dir = new DirectoryIterator('./upload');
+    $index = 0;
+    foreach ($dir as $fileinfo) { 
         if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-            echo '<div style="padding: 1em;">';
-            echo '<div style="display:flex;">';
-            echo getColorIcon($fileinfo->getFilename()) . '<br>';
-            echo getBWIcon($fileinfo->getFilename()) . '<br>';
-            echo '</div><div>';
-            echo '<a style="float:left;" href="./upload/' . $fileinfo->getFilename() . '/tmp.zip">ICONDATA</a><span style="width:10px;">&nbsp;</span><a style="float:right;" href="./upload/' . $fileinfo->getFilename() . '/vmu.zip">extras</a></div></div>';
+            array_push($folders, array('txt' => $fileinfo->getFilename()));
         }
     }
+    $TBS->MergeBlock('bx',$folders);
+    $TBS->Show(TBS_OUTPUT);
 }
 
 // Report all PHP errors (see changelog)
