@@ -24,16 +24,22 @@ if ((isset($_SESSION['logged'])) and ($_SESSION['logged'] == 1)) {
     </tr>
     <tr>
       <td bgcolor="#EEEEEE" align="center">
-        <table cellspacing="3" cellpadding="3">
+        <table cellspacing="3" cellpadding="3"><br>
           <?php
- $dir = new DirectoryIterator(dirname(__FILE__).'//uploads//'.$_SESSION['user']);
-foreach ($dir as $fileinfo) {
-    if (!$fileinfo->isDot()) {
-        if (stristr($fileinfo->getFilename(), "VMI")) {
-            print('<tr><td colspan="2" align="center"><a href="uploads/'.$_SESSION['user']."//".$fileinfo->getFilename().'">'.$fileinfo->getFilename().'</a><br></td></tr>');
-        }
-    }
-}
+          if ((isset($_SESSION['logged'])) and ($_SESSION['logged'] == 1)) {
+              $subdir = "";
+              if (isset($_SESSION['user'])) {
+                  $subdir = $_SESSION['user'];
+              }
+              $dir = new DirectoryIterator(dirname(__FILE__).'//uploads//'.$subdir);
+              foreach ($dir as $fileinfo) {
+                  if (!$fileinfo->isDot()) {
+                      if (stristr($fileinfo->getFilename(), "VMI")) {
+                          print('<tr><td colspan="2" align="center"><a href="uploads/'.$subdir."//".$fileinfo->getFilename().'">'.$fileinfo->getFilename().'</a><br></td></tr>');
+                      }
+                  }
+              }
+          }
 ?>
         </table>
       </td>
