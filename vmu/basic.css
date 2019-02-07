@@ -1,0 +1,19 @@
+body {
+    background-color: #6AD4D0;
+    margin-top:0 !important;
+    padding-top:0 !important;
+    min-width:800px !important;
+    color:  #474747;
+}
+
+#mainTable {
+    background-color: #DDE0E0;
+}
+
+#topTable {
+    background-color: #c7c7c7;
+}
+
+p {
+    color:  #474747;
+}
