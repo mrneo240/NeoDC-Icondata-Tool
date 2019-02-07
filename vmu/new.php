@@ -1,9 +1,7 @@
 <?php
 include_once('basic.php');
 
-$html_output = "";
 $page_title = "home";
-
 $TBS->LoadTemplate('_header.html');
 $TBS->Show(TBS_OUTPUT);
 

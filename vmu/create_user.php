@@ -17,6 +17,9 @@ if (!isset($_POST['uname']) || !isset($_POST['pass'])) {
     $TBS->Show(TBS_OUTPUT);
     $_SESSION['user'] = $_POST['uname']; 
     $_SESSION['logged'] = 1; 
+    if(!is_dir('uploads/'.$_POST['uname'])){
+        mkdir('uploads/'.$_POST['uname']);
+    }
 }
 $TBS->LoadTemplate('_footer.html');
 $TBS->Show(TBS_OUTPUT);

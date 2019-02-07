@@ -1,22 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>VMU File Uploader - Beta Test Area</title>
-</head>
-<body bgcolor="#AAAAAA">
-<br><br>
+<?php 
+include_once('basic.php');
+
+$html_output = "";
+$page_title = "uploader";
+$TBS = new clsTinyButStrong;
+$TBS->LoadTemplate('_header.html');
+$TBS->Show(TBS_OUTPUT);
+$TBS->LoadTemplate('_basic_start.html');
+$TBS->Show(TBS_OUTPUT);
+?>
 <center>
 <table bgcolor="#000000" cellspacing="2" cellpadding="0" border="1" bordercolor="#000000">
   <tr><td align="center"><font face="arial" color="#EEEEEE"><b><i>VMU Upload Status</i></b></font></td></tr>
   <tr><td bgcolor="#EEEEEE" align="center"><br>
   <table cellspacing="3" cellpadding="3">
-    <tr><td><a href="index.html">Generated Downloads</a></td></tr>
-    <tr><td><a href="extras/index.html">Extras</a></td></tr>
     <tr><td>
+        
 <?php
 require_once '../vmi_format.php';
 
-$logname = 'uploads//' . md5(time());
+$target_dir = "uploads//";
+if(isset($_POST['private']) && $_SESSION['logged']==1){
+    $target_dir .= $_SESSION['user']."//";
+}
+
+$logname = $target_dir . md5(time());
 function logInfo()
 {
     global $logname;
@@ -31,7 +39,7 @@ function logInfo()
 }
 logInfo();
 
-$target_dir = "uploads/";
+
 $target_file = $target_dir . 'default';
 $uploadOk = 1;
 if (isset($_POST['upfile']) && strlen($_POST['upfile'])>1) {
@@ -89,11 +97,15 @@ function getVms($body)
     return $vms;
 }
 ?>
-  </td></tr><tr><td><a href="uploader.php">Back to Uploader</a></td></tr></table>
-  </form>
-</td></tr>
 
+
+    </td></tr><tr><td><a href="uploader.php">Back to Uploader</a></td></tr></table>
+</td></tr>
 </table>
 </center>
-</body>
-</html>
+<?php
+$TBS->LoadTemplate('_basic_end.html');
+$TBS->Show(TBS_OUTPUT);
+$TBS->LoadTemplate('_footer.html');
+$TBS->Show(TBS_OUTPUT);
+?>
