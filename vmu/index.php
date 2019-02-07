@@ -23,11 +23,9 @@ echo '<table align="center" border="0" cellpadding="0" cellspacing="0" width="60
             <p>This website is best experienced on XDP, Planetweb, Dream Passport, or
             Dream Key</p>
 
-            <p>Dreampipe is a portal for Dreamcast Websites, Leaderboards, and VMU
-            content</p>
+            <p>blah</p>
 
-            <p>You can access Dreampipe in many Dreamcast games with internet
-            browsing</p>
+            <p>blah</p>
           </td>
         </tr>
         <tr>
@@ -40,4 +38,3 @@ echo '<table align="center" border="0" cellpadding="0" cellspacing="0" width="60
 </table>';
 $TBS->LoadTemplate('_footer.html');
 $TBS->Show(TBS_OUTPUT);
-?>

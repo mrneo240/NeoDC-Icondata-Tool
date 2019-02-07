@@ -9,13 +9,11 @@ $vmiDescription = array('Checksum' => '0000', //dont touch
 $dir = new DirectoryIterator(dirname(__FILE__));
 foreach ($dir as $fileinfo) {
     if (!$fileinfo->isDot()) {
-    if(stristr($fileinfo->getFilename(),"VMS")){
-        createVMI($vmiDescription,substr($fileinfo->getFilename(),0,-4),"Checking");
-    }
-    if(stristr($fileinfo->getFilename(),"VMI")){
-        //print('<a href="'.uniqueFilename($fileinfo->getFilename()).'">'.$fileinfo->getFilename().'</a><br>');
-    }
+        if (stristr($fileinfo->getFilename(), "VMS")) {
+            createVMI($vmiDescription, substr($fileinfo->getFilename(), 0, -4), "Checking");
+        }
+        if (stristr($fileinfo->getFilename(), "VMI")) {
+            //print('<a href="'.uniqueFilename($fileinfo->getFilename()).'">'.$fileinfo->getFilename().'</a><br>');
+        }
     }
 }
-
-?>

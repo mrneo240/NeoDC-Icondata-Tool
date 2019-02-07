@@ -1,4 +1,4 @@
-<?php 
+<?php
 include_once('basic.php');
 
 $html_output = "";
@@ -10,16 +10,22 @@ $TBS->LoadTemplate('_basic_start.html');
 $TBS->Show(TBS_OUTPUT);
 ?>
 <center>
-<table bgcolor="#000000" cellspacing="2" cellpadding="0" border="1" bordercolor="#000000">
-  <tr><td align="center"><font face="arial" color="#EEEEEE"><b><i>VMU Upload Status</i></b></font></td></tr>
-  <tr><td bgcolor="#EEEEEE" align="center"><br>
-  <table cellspacing="3" cellpadding="3">
-    <tr><td>
-<?php
+  <table bgcolor="#000000" cellspacing="2" cellpadding="0" border="1" bordercolor="#000000">
+    <tr>
+      <td align="center">
+        <font face="arial" color="#EEEEEE"><b><i>VMU Upload Status</i></b></font>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#EEEEEE" align="center"><br>
+        <table cellspacing="3" cellpadding="3">
+          <tr>
+            <td>
+              <?php
 require_once '../vmi_format.php';
 
 $target_dir = "uploads//";
-if(isset($_POST['private']) && $_SESSION['logged']==1){
+if (isset($_POST['private']) && $_SESSION['logged']==1) {
     $target_dir .= $_SESSION['user']."//";
 }
 
@@ -96,9 +102,15 @@ function getVms($body)
     return $vms;
 }
 ?>
-    </td></tr><tr><td><a href="uploader.php">Back to Uploader</a></td></tr></table>
-</td></tr>
-</table>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="uploader.php">Back to Uploader</a></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </center>
 <?php
 $TBS->LoadTemplate('_basic_end.html');
