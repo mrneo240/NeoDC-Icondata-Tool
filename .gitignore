@@ -1,7 +1,5 @@
 server
 Junk/
 *.vms
-*.png
-*.jpg
 *.txt
 upload
