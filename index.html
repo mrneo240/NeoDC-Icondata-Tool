@@ -1,94 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>Icondata Tool</title>
-    <meta charset="utf-8">
-    <meta content="NeoDC/HaydenK." name="author">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Josefin+Sans:300,300i,400" rel="stylesheet">
-    <link href="page.css" rel="stylesheet">
-</head>
+<html lang="en-US">
 
-<body>
-    <div class="wrapper">
-        <header class="topBar">
-            <div class="topBarBottom">
-                <h2>Dreamcast VMU Icondata Creator</h2>
-            </div>
-            <div class="topBarBottom">
-                <a href="index.html">Icon Creator</a>
-                <span style="margin: 1em;font-size: 18px;">&nbsp;</span>
-                <a href="Combine.html">Combine 2 seperate icons</a>
-                <span style="margin: 1em;font-size: 18px;">&nbsp;</span>
-                <a href="browser.html">Image Gallery</a>
-            </div>
-        </header>
-        <main>
-            <div class="select">
-                <div style="display: flex;">
-                    <div style="flex: 5">
-                        <p>
-                            <h3>Select File: </h3>
-                            <input type="file" id="_file">
-                            <input type="button" id="_submit" value="Upload!">
-                        </p>
-                        <div class="progress_outer">
-                            <div id="_progress" class="progress"></div>
-                        </div>
-                    </div>
-                    <div style="flex: 1;height: 48px;line-height: 48px;white-space: nowrap;overflow: hidden;" id="status"></div>
-                </div>
-            </div>
-            <div id="vmu" style="visibility: hidden;">
-                <div>
-                    <div>
-                        <h3>Image Previews</h3>
-                        <div id="Previews">
-                            <div id="ImgPreview"></div>
-                            <div id="bwPreview"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <h3>Grayscale Adjust</h3>
-                        <div class="slidecontainer">
-                            <input type="range" min="1" max="15" value="8" class="slider" id="myRange">
-                        </div>
-                    </div>
-                </div>
-                <div style="display: table">
-                    <div style="display:table">
-                        <div style="float:left;margin: 0px 10px 10px 10px;">
-                            <h3>Invert</h3>
-                            <label class="container">
-                                <input type="checkbox" checked="checked" id="myCheck" onclick="updateBWImgHTML()">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div style="float:left;margin: 0px 10px 10px 10px;">
-                            <h3>Dither</h3>
-                            <label class="container">
-                                <input type="checkbox" id="myDither" onclick="updateBWImgHTML()">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div style="margin-top: 2em;">
-                        <div style="margin: 0px 10px 10px 10px;">
-                            <h3>Palette</h3>
-                         <div id="palette"></div>
-                         </div>
-                    </div>
-                </div>
-                <form id="form" name="form">
-                    <input id="submit" onclick="saveVMU()" class="button" value="Submit">
-                </form>
-                <div id="save"></div>
-            </div>
-    </div>
-    </main>
-    <script src="ajax.js"></script>
-    <script src="upload.js"></script>
-</body>
-
-</html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>HaydenKow/NeoDC Dreamcast</title>
+      <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+      <link type="text/css" rel="stylesheet" href="dc/basic.css">
+    </head>
+    
+    <body>
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+    <tbody>
+      <tr>
+        <td valign="top" width="600">
+          <table width="600" border="0px" id="mainTable">
+            <tr>
+              <th>
+                <p><img align="left" src="img/welcome.png" width="300" /></p>
+                <br><p>Please Choose your Experience:</p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+               <a href="dc/index.php"><img src="img/dreamcast.png" width="300" height="324" /></a>
+              </td>
+              <td>
+               <a href="index-pc.html"><img src="img/computer.png" width="300" height="324" /></a>
+              </td>
+            </tr>
+            <tr>
+              <td height="80px"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+    </table><table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+      <tbody>
+        <tr>
+          <td><img src="img/bar.png" alt=" " height="4" width="600"></td>
+        </tr><tr>
+          <td>
+          <table border="0" cellpadding="0" cellspacing="0" width="600">
+            <tbody>
+              <tr>
+                <td><center><font color="white" link="white" alink="white" vlink"white"><br> Website Design: &copy; DREAMPIPE.NET 2018 | Website Coding/Assets: &copy;HaydenKow 2019</center></font></td>
+              </tr>
+            </tbody>
+          </table>
+          </td>
+      </tbody>
+    </table>
+    <embed style="height:1px; width:1px; visibility:collapse; display:none;" height="1" width="1" name="lcd1" type="application/x-dreamcast-lcdimg" src="http://dreampipe.net/dpwww/dreampipe.lcd" hidden="true" port="A" slot="1" loop="infinite"></embed>
+    </body>
+    </html>
