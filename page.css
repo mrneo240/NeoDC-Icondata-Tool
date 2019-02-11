@@ -230,3 +230,7 @@ textarea {
 #palette p {
     -webkit-text-stroke: 0.1px white;
 }
+
+#icondata table, th, td {
+    border-style: none;
+}

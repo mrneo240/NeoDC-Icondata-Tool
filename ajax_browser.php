@@ -132,14 +132,14 @@ function getIconColor()
     if (isset($_REQUEST['hash'])) {$hash = $_REQUEST['hash'];}
     echo getColorIcon($hash);
 }
-function getAllImages()
+function getAllImages($prefix = ".")
 {
-    $dir = new DirectoryIterator('./upload');
     include_once('tbs_class.php');
     $folders = array();
     $TBS = new clsTinyButStrong;
+    $TBS->VarRef['prefix'] = $prefix;
     $TBS->LoadTemplate('gallery_item.htm');
-    $dir = new DirectoryIterator('./upload');
+    $dir = new DirectoryIterator($prefix.'/upload');
     $index = 0;
     foreach ($dir as $fileinfo) { 
         if ($fileinfo->isDir() && !$fileinfo->isDot()) {

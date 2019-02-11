@@ -17,3 +17,7 @@ body {
 p {
     color:  #474747;
 }
+
+table, th, td {
+    border-style: none;
+}
